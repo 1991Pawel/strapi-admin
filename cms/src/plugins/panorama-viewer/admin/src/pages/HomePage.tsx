@@ -1,7 +1,7 @@
+import { useState } from 'react';
 import { Main, Box } from '@strapi/design-system';
 import { Settings } from '../components/Settings';
 import { Viewer } from '../components/Viewer';
-import { useState } from 'react';
 
 type EditorState = {
   panoramas: any;
@@ -12,6 +12,9 @@ const HomePage = () => {
   const [editorState, setEditorState] = useState<EditorState>({
     panoramas: [],
   });
+
+  console.log(editorState, 'editorState');
+
   return (
     <Main>
       <Box padding={6} style={{ width: '100%' }}>
@@ -24,10 +27,10 @@ const HomePage = () => {
           }}
         >
           <Box style={{ background: 'red' }}>
-            <Settings />
+            <Settings editorState={editorState} setEditorState={setEditorState} />
           </Box>
           <Box style={{ background: 'blue' }}>
-            <Viewer />
+            <Viewer editorState={editorState} setEditorState={setEditorState} />
           </Box>
         </Box>
       </Box>
