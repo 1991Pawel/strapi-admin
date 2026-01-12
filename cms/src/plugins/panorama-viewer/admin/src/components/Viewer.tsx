@@ -1,14 +1,13 @@
 import { Box } from '@strapi/design-system';
 import { PanoramaCanvas } from './PanoramaCanvas';
 import { Canvas } from '@react-three/fiber';
+import { type EditorState, type StateSetter } from '../types';
 
-const Viewer = ({
-  editorState,
-  setEditorState,
-}: {
-  editorState: any;
-  setEditorState: (state: any) => void;
-}) => {
+interface ViewerProps {
+  setEditorState: StateSetter<EditorState>;
+  editorState: EditorState;
+}
+const Viewer = ({ editorState, setEditorState }: ViewerProps) => {
   if (editorState.panoramas.length === 0) {
     return <Box>No panorama loaded</Box>;
   }

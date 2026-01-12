@@ -3,7 +3,7 @@ import { OrbitControls } from '@react-three/drei';
 
 import { useTexture } from '@react-three/drei';
 
-const PanoramaCanvas = ({ src }: any) => {
+const PanoramaCanvas = ({ src }: string) => {
   const texture = useTexture(src);
   return (
     <>

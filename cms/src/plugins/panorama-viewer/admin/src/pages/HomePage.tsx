@@ -2,18 +2,12 @@ import { useState } from 'react';
 import { Main, Box } from '@strapi/design-system';
 import { Settings } from '../components/Settings';
 import { Viewer } from '../components/Viewer';
-
-type EditorState = {
-  panoramas: any;
-  activePanoramaId?: string;
-};
+import { type EditorState } from '../types';
 
 const HomePage = () => {
   const [editorState, setEditorState] = useState<EditorState>({
     panoramas: [],
   });
-
-  console.log(editorState, 'editorState');
 
   return (
     <Main>
