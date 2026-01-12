@@ -2,10 +2,10 @@ import { Box, Button } from '@strapi/design-system';
 import { useRef } from 'react';
 import { type EditorState, StateSetter } from '../types';
 
-interface SettingsProps {
+type SettingsProps = {
   setEditorState: StateSetter<EditorState>;
   editorState: EditorState;
-}
+};
 
 const Settings = ({ setEditorState, editorState }: SettingsProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -13,7 +13,10 @@ const Settings = ({ setEditorState, editorState }: SettingsProps) => {
   const { panoramas } = editorState;
 
   return (
-    <Box padding={6} style={{ width: '100%', flexDirection: 'column', display: 'flex' }}>
+    <Box
+      padding={6}
+      style={{ width: '100%', flexDirection: 'column', display: 'flex', minHeight: '400px' }}
+    >
       Settings
       <Button
         onClick={() => {

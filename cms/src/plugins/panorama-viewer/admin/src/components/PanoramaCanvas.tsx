@@ -1,9 +1,9 @@
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { useTexture, Html, OrbitControls } from '@react-three/drei';
+type PanoramaCanvasProps = {
+  src: string;
+};
 
-import { useTexture } from '@react-three/drei';
-
-const PanoramaCanvas = ({ src }: string) => {
+const PanoramaCanvas = ({ src }: PanoramaCanvasProps) => {
   const texture = useTexture(src);
   return (
     <>
@@ -11,9 +11,21 @@ const PanoramaCanvas = ({ src }: string) => {
         <sphereGeometry args={[50, 64, 64]} />
         <meshBasicMaterial side={2} map={texture} />
       </mesh>
-
-      <OrbitControls enableZoom={false} enablePan={false} rotateSpeed={-0.35} />
+      {/* statyczne hotspoty (na sztywno) */}
+      <mesh position={[0, 0, 0]}>
+        <Html center distanceFactor={10}>
+          <div className="label">Mój element HTML</div>
+        </Html>
+      </mesh>
+      <OrbitControls
+        makeDefault
+        enableZoom={false}
+        enablePan={false}
+        rotateSpeed={-0.35}
+        target={[0, 0, -1]}
+      />
     </>
   );
 };
+
 export { PanoramaCanvas };
