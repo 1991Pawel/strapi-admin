@@ -3,13 +3,28 @@ import { Main, Box } from '@strapi/design-system';
 import { Settings } from '../components/Settings';
 import { Viewer } from '../components/Viewer';
 import { type EditorState } from '../types';
-import { Hotspots } from '../components/Hotspots';
 import { Button } from '@strapi/design-system';
 
 const HomePage = () => {
   const [editorState, setEditorState] = useState<EditorState>({
     panoramas: [],
+    hotspots: [],
   });
+
+  const handleAddHotspot = () => {
+    const newHotspot = {
+      id: Date.now().toString(),
+      panoramaId: editorState.activePanoramaId || 'default-panorama',
+      type: 'link' as const,
+      position: { x: 0, y: 0, z: 0 },
+      targetPanoramaId: 'target-panorama-id',
+    };
+
+    setEditorState((prev: EditorState) => ({
+      ...prev,
+      hotspots: [...prev.hotspots, newHotspot],
+    }));
+  };
 
   return (
     <Main>
@@ -29,7 +44,7 @@ const HomePage = () => {
             <Viewer editorState={editorState} setEditorState={setEditorState} />
           </Box>
           <Box>
-            <Button onClick={() => console.log(editorState)}>Dodaj Link Hotspot</Button>
+            <Button onClick={handleAddHotspot}>Dodaj Link Hotspot</Button>
           </Box>
         </Box>
       </Box>
