@@ -16,7 +16,7 @@ const HomePage = () => {
       id: Date.now().toString(),
       panoramaId: editorState.activePanoramaId || 'default-panorama',
       type: 'link' as const,
-      position: { x: 0, y: 0, z: 0 },
+      position: null,
       targetPanoramaId: 'target-panorama-id',
     };
 

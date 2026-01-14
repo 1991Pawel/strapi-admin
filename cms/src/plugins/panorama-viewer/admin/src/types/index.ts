@@ -9,7 +9,7 @@ export type Hotspot = {
     x: number;
     y: number;
     z: number;
-  };
+  } | null;
   targetPanoramaId?: string;
   infoText?: string;
 };
