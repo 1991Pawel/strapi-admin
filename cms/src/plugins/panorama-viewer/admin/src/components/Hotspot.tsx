@@ -1,12 +1,13 @@
 import { Html, Billboard } from '@react-three/drei';
-import { type Hotspot as HotspotType } from '../types';
+import { type Hotspot as HotspotType, EditorState, StateSetter } from '../types';
 
 type HotspotProps = {
   hotspot: HotspotType;
   position: { x: number; y: number; z: number };
+  setEditorState: StateSetter<EditorState>;
 };
 
-const Hotspot = ({ position, hotspot }: HotspotProps) => {
+const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
   const handlePointerDown = (e: any) => {
     e.stopPropagation();
     console.log('hotspot pointer down', e);
@@ -19,6 +20,16 @@ const Hotspot = ({ position, hotspot }: HotspotProps) => {
     e.stopPropagation();
     console.log('hotspot pointer move', e);
   };
+
+  const handleDelete = (id: string) => {
+    console.log('delete hotspot', id);
+    setEditorState((prev: EditorState) => ({
+      ...prev,
+      hotspots: prev.hotspots.filter((hs) => hs.id !== id),
+    }));
+    console.log(hotspot);
+  };
+
   return (
     <group position={[position.x, position.y, position.z]} key={hotspot.id}>
       <Billboard follow>
@@ -102,7 +113,7 @@ const Hotspot = ({ position, hotspot }: HotspotProps) => {
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log('usuń hotspot');
+                  handleDelete(hotspot.id);
                 }}
               >
                 🗑️ Usuń
