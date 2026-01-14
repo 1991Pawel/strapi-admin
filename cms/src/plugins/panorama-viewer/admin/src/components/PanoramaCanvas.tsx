@@ -8,7 +8,7 @@ import { useThree } from '@react-three/fiber';
 
 const centerOnSphere = (camera: any, R: number) => {
   const dir = camera.getWorldDirection(new Vector3()).normalize();
-  return dir.multiplyScalar(R - 0.05); // zakładamy kamera ~w środku
+  return dir.multiplyScalar(R - 0.05);
 };
 type PanoramaCanvasProps = {
   setEditorState: StateSetter<EditorState>;
@@ -33,6 +33,7 @@ const PanoramaCanvas = ({ setEditorState, editorState, src }: PanoramaCanvasProp
 
       {hotspots.map((hotspot) => (
         <Hotspot
+          key={hotspot.id}
           position={{
             x: p.x,
             y: p.y,

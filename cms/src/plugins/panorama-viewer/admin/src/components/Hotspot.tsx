@@ -7,6 +7,18 @@ type HotspotProps = {
 };
 
 const Hotspot = ({ position, hotspot }: HotspotProps) => {
+  const handlePointerDown = (e: any) => {
+    e.stopPropagation();
+    console.log('hotspot pointer down', e);
+  };
+  const handlePointerUp = (e: any) => {
+    e.stopPropagation();
+    console.log('hotspot pointer up', e);
+  };
+  const hanldePointerMove = (e: any) => {
+    e.stopPropagation();
+    console.log('hotspot pointer move', e);
+  };
   return (
     <group position={[position.x, position.y, position.z]} key={hotspot.id}>
       <Billboard follow>
@@ -19,9 +31,11 @@ const Hotspot = ({ position, hotspot }: HotspotProps) => {
               alignItems: 'center',
               fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
             }}
-            onPointerDown={(e) => e.stopPropagation()}
           >
             <div
+              onPointerDown={handlePointerDown}
+              onPointerUp={handlePointerUp}
+              onPointerMove={hanldePointerMove}
               style={{
                 width: '14px',
                 height: '14px',

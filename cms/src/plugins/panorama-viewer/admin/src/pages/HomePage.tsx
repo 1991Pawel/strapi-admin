@@ -4,6 +4,7 @@ import { Settings } from '../components/Settings';
 import { Viewer } from '../components/Viewer';
 import { type EditorState } from '../types';
 import { Button } from '@strapi/design-system';
+import { useId } from 'react';
 
 const HomePage = () => {
   const [editorState, setEditorState] = useState<EditorState>({
@@ -17,7 +18,6 @@ const HomePage = () => {
       panoramaId: editorState.activePanoramaId || 'default-panorama',
       type: 'link' as const,
       position: null,
-      targetPanoramaId: 'target-panorama-id',
     };
 
     setEditorState((prev: EditorState) => ({
