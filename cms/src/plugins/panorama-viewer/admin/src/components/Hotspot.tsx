@@ -8,26 +8,24 @@ type HotspotProps = {
 };
 
 const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
-  const handlePointerDown = (e: any) => {
+  const handlePointerDown = (e: any, hotspotId: string) => {
     e.stopPropagation();
-    console.log('hotspot pointer down', e);
+    setEditorState((prev) => ({ ...prev, draggingHotspotId: hotspot.id }));
   };
   const handlePointerUp = (e: any) => {
     e.stopPropagation();
-    console.log('hotspot pointer up', e);
+    setEditorState((prev) => ({ ...prev, draggingHotspotId: null }));
   };
   const hanldePointerMove = (e: any) => {
     e.stopPropagation();
-    console.log('hotspot pointer move', e);
+    // console.log('hotspot pointer move', e);
   };
 
   const handleDelete = (id: string) => {
-    console.log('delete hotspot', id);
     setEditorState((prev: EditorState) => ({
       ...prev,
-      hotspots: prev.hotspots.filter((hs) => hs.id !== id),
+      hotspots: prev.hotspots.filter((hotspot) => hotspot.id !== id),
     }));
-    console.log(hotspot);
   };
 
   return (
@@ -44,23 +42,34 @@ const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
             }}
           >
             <div
-              onPointerDown={handlePointerDown}
+              onPointerDown={(e) => handlePointerDown(e, hotspot.id)}
               onPointerUp={handlePointerUp}
               onPointerMove={hanldePointerMove}
-              style={{
-                width: '14px',
-                height: '14px',
-                borderRadius: '50%',
-                background: '#ffffff',
-                border: '2px solid rgba(0,0,0,0.35)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.35)',
-                cursor: 'pointer',
-              }}
               onClick={(e) => {
                 e.stopPropagation();
                 console.log('klik hotspot');
               }}
-            />
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                background: '#15ac5cff',
+                border: '2px solid rgba(0,0,0,0.35)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.35)',
+                cursor: 'grab',
+
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+
+                fontSize: '10px',
+                lineHeight: 1,
+                color: 'rgba(0,0,0,0.6)',
+                userSelect: 'none',
+              }}
+            >
+              ↔
+            </div>
 
             <div
               style={{

@@ -10,6 +10,7 @@ const HomePage = () => {
   const [editorState, setEditorState] = useState<EditorState>({
     panoramas: [],
     hotspots: [],
+    draggingHotspotId: null,
   });
 
   const handleAddHotspot = () => {

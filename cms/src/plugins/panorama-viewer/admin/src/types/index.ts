@@ -18,4 +18,5 @@ export type EditorState = {
   panoramas: File[];
   activePanoramaId?: string;
   hotspots: Hotspot[];
+  draggingHotspotId: string | null;
 };
