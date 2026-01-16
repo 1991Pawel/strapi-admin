@@ -1,6 +1,7 @@
+// Hotspot.tsx
 import { Html, Billboard } from '@react-three/drei';
 import { type Hotspot as HotspotType, EditorState, StateSetter } from '../types';
-import { useRef } from 'react';
+
 type HotspotProps = {
   hotspot: HotspotType;
   position: { x: number; y: number; z: number };
@@ -8,40 +9,41 @@ type HotspotProps = {
 };
 
 const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
-  const handlePointerDown = (e: any, hotspotId: string) => {
-    e.stopPropagation();
-    setEditorState((prev) => ({ ...prev, draggingHotspotId: hotspot.id }));
-    console.log('hotspot pointer down', hotspotId);
-  };
-  const handlePointerUp = (e: any) => {
-    e.stopPropagation();
-    console.log('hotspot pointer up');
-    setEditorState((prev) => ({ ...prev, draggingHotspotId: null }));
-  };
-  const hanldePointerMove = (e: any) => {
+  const handlePointerDown = (e: any) => {
     e.stopPropagation();
 
-    console.log('hotspot pointer move', e);
+    if (e?.target?.setPointerCapture && e?.pointerId != null) {
+      e.target.setPointerCapture(e.pointerId);
+    }
+
+    setEditorState((prev) => ({ ...prev, draggingHotspotId: hotspot.id }));
+  };
+
+  const handlePointerUp = (e: any) => {
+    e.stopPropagation();
+
+    if (e?.target?.releasePointerCapture && e?.pointerId != null) {
+      e.target.releasePointerCapture(e.pointerId);
+    }
+
+    setEditorState((prev) => ({ ...prev, draggingHotspotId: null }));
   };
 
   const handleDelete = (id: string) => {
     setEditorState((prev: EditorState) => ({
       ...prev,
-      hotspots: prev.hotspots.filter((hotspot) => hotspot.id !== id),
+      hotspots: prev.hotspots.filter((h) => h.id !== id),
     }));
   };
 
   return (
     <group position={[position.x, position.y, position.z]} key={hotspot.id}>
       <Billboard follow>
-        <mesh
-          onPointerDown={(e) => handlePointerDown(e, hotspot.id)}
-          onPointerUp={handlePointerUp}
-          position={[0, 16, 1]}
-        >
-          {' '}
-          <sphereGeometry args={[5, 24, 24]} /> <meshBasicMaterial color="red" />{' '}
+        <mesh onPointerDown={handlePointerDown} onPointerUp={handlePointerUp} position={[0, 16, 1]}>
+          <sphereGeometry args={[5, 24, 24]} />
+          <meshBasicMaterial transparent opacity={0} />
         </mesh>
+
         <Html pointerEvents="none" transform distanceFactor={100}>
           <div
             style={{
@@ -60,11 +62,9 @@ const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
                 border: '2px solid rgba(0,0,0,0.35)',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.35)',
                 cursor: 'grab',
-
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-
                 fontSize: '10px',
                 lineHeight: 1,
                 color: 'rgba(0,0,0,0.6)',
@@ -88,15 +88,7 @@ const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div
-                style={{
-                  fontWeight: 700,
-                  marginBottom: '8px',
-                  fontSize: '12px',
-                }}
-              >
-                Hotspot
-              </div>
+              <div style={{ fontWeight: 700, marginBottom: '8px', fontSize: '12px' }}>Hotspot</div>
 
               <div
                 style={{

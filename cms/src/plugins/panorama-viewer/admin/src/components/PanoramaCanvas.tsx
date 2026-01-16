@@ -20,11 +20,36 @@ const PanoramaCanvas = ({ setEditorState, editorState, src }: PanoramaCanvasProp
   const texture = useTexture(src);
   const hotspots = editorState.hotspots;
   const { camera } = useThree();
-  const initialHotspotPositionsRef = useRef(centerOnSphere(camera, R));
+
+  const initalHotspotPosition = centerOnSphere(camera, R);
+
+  const onPointerMove = (e: any) => {
+    if (editorState.draggingHotspotId !== null) {
+      e.stopPropagation();
+      console.log('canvas pointer move');
+      console.log('e.point', e.point);
+      const dir = e.point.clone().normalize();
+      const newPos = dir.multiplyScalar(R - 0.5);
+      // hidden mesh is y=16 above the hotspot position
+      const offsetY = 16;
+
+      setEditorState((prev) => ({
+        ...prev,
+        hotspots: prev.hotspots.map((hotspot) =>
+          hotspot.id === prev.draggingHotspotId
+            ? {
+                ...hotspot,
+                position: { x: newPos.x, y: newPos.y - offsetY, z: newPos.z },
+              }
+            : hotspot
+        ),
+      }));
+    }
+  };
 
   return (
     <>
-      <mesh scale={[-1, 1, 1]}>
+      <mesh onPointerMove={onPointerMove} scale={[-1, 1, 1]}>
         <sphereGeometry args={[R, 64, 64]} />
         <meshBasicMaterial side={1} map={texture} />
       </mesh>
@@ -34,9 +59,9 @@ const PanoramaCanvas = ({ setEditorState, editorState, src }: PanoramaCanvasProp
           setEditorState={setEditorState}
           key={hotspot.id}
           position={{
-            x: hotspot.position ? hotspot.position.x : initialHotspotPositionsRef.current.x,
-            y: hotspot.position ? hotspot.position.y : initialHotspotPositionsRef.current.y,
-            z: hotspot.position ? hotspot.position.z : initialHotspotPositionsRef.current.z,
+            x: hotspot.position ? hotspot.position.x : initalHotspotPosition.x,
+            y: hotspot.position ? hotspot.position.y : initalHotspotPosition.y,
+            z: hotspot.position ? hotspot.position.z : initalHotspotPosition.z,
           }}
           hotspot={hotspot}
         />
