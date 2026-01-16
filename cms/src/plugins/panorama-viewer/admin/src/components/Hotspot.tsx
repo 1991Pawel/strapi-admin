@@ -1,6 +1,6 @@
 import { Html, Billboard } from '@react-three/drei';
 import { type Hotspot as HotspotType, EditorState, StateSetter } from '../types';
-
+import { useRef } from 'react';
 type HotspotProps = {
   hotspot: HotspotType;
   position: { x: number; y: number; z: number };
@@ -11,14 +11,17 @@ const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
   const handlePointerDown = (e: any, hotspotId: string) => {
     e.stopPropagation();
     setEditorState((prev) => ({ ...prev, draggingHotspotId: hotspot.id }));
+    console.log('hotspot pointer down', hotspotId);
   };
   const handlePointerUp = (e: any) => {
     e.stopPropagation();
+    console.log('hotspot pointer up');
     setEditorState((prev) => ({ ...prev, draggingHotspotId: null }));
   };
   const hanldePointerMove = (e: any) => {
     e.stopPropagation();
-    // console.log('hotspot pointer move', e);
+
+    console.log('hotspot pointer move', e);
   };
 
   const handleDelete = (id: string) => {
@@ -31,10 +34,17 @@ const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
   return (
     <group position={[position.x, position.y, position.z]} key={hotspot.id}>
       <Billboard follow>
-        <Html transform distanceFactor={100}>
+        <mesh
+          onPointerDown={(e) => handlePointerDown(e, hotspot.id)}
+          onPointerUp={handlePointerUp}
+          position={[0, 16, 1]}
+        >
+          {' '}
+          <sphereGeometry args={[5, 24, 24]} /> <meshBasicMaterial color="red" />{' '}
+        </mesh>
+        <Html pointerEvents="none" transform distanceFactor={100}>
           <div
             style={{
-              pointerEvents: 'auto',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -42,13 +52,6 @@ const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
             }}
           >
             <div
-              onPointerDown={(e) => handlePointerDown(e, hotspot.id)}
-              onPointerUp={handlePointerUp}
-              onPointerMove={hanldePointerMove}
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log('klik hotspot');
-              }}
               style={{
                 width: '32px',
                 height: '32px',
@@ -103,6 +106,7 @@ const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
                   background: 'rgba(255,255,255,0.06)',
                   cursor: 'pointer',
                   marginBottom: '6px',
+                  pointerEvents: 'auto',
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -119,6 +123,7 @@ const Hotspot = ({ position, hotspot, setEditorState }: HotspotProps) => {
                   border: '1px solid rgba(231,76,60,0.35)',
                   background: 'rgba(231,76,60,0.18)',
                   cursor: 'pointer',
+                  pointerEvents: 'auto',
                 }}
                 onClick={(e) => {
                   e.stopPropagation();

@@ -3,7 +3,7 @@ import { PanoramaCanvas } from './PanoramaCanvas';
 import { Canvas } from '@react-three/fiber';
 import { type EditorState, type StateSetter } from '../types';
 import { useMemo } from 'react';
-import { useTexture } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 
 type ViewerProps = {
   setEditorState: StateSetter<EditorState>;
@@ -23,6 +23,12 @@ const Viewer = ({ editorState, setEditorState }: ViewerProps) => {
   return (
     <Box padding={6} style={{ width: '100%', height: '100%' }}>
       <Canvas camera={{ fov: 75, position: [0, 0, 0] }}>
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          rotateSpeed={-0.35}
+          target={[0, 0, -1]}
+        />
         <PanoramaCanvas src={fileSrc} editorState={editorState} setEditorState={setEditorState} />
       </Canvas>
     </Box>

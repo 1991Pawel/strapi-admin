@@ -2,7 +2,6 @@ import { useTexture, Html, OrbitControls } from '@react-three/drei';
 import { type EditorState, type StateSetter } from '../types';
 import { useRef } from 'react';
 import { Vector3 } from 'three';
-import { useFrame } from '@react-three/fiber';
 import { Hotspot } from './Hotspot';
 import { useThree } from '@react-three/fiber';
 
@@ -21,8 +20,7 @@ const PanoramaCanvas = ({ setEditorState, editorState, src }: PanoramaCanvasProp
   const texture = useTexture(src);
   const hotspots = editorState.hotspots;
   const { camera } = useThree();
-
-  const p = centerOnSphere(camera, R);
+  const initialHotspotPositionsRef = useRef(centerOnSphere(camera, R));
 
   return (
     <>
@@ -36,15 +34,13 @@ const PanoramaCanvas = ({ setEditorState, editorState, src }: PanoramaCanvasProp
           setEditorState={setEditorState}
           key={hotspot.id}
           position={{
-            x: p.x,
-            y: p.y,
-            z: p.z,
+            x: hotspot.position ? hotspot.position.x : initialHotspotPositionsRef.current.x,
+            y: hotspot.position ? hotspot.position.y : initialHotspotPositionsRef.current.y,
+            z: hotspot.position ? hotspot.position.z : initialHotspotPositionsRef.current.z,
           }}
           hotspot={hotspot}
         />
       ))}
-
-      <OrbitControls enableZoom={false} enablePan={false} rotateSpeed={-0.35} target={[0, 0, -1]} />
     </>
   );
 };
