@@ -1,6 +1,11 @@
 import type { Dispatch, SetStateAction } from 'react';
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
 
+export type PanoramaFile = {
+  id: string;
+  file: File;
+};
+
 export type Hotspot = {
   id: string;
   panoramaId: string;
@@ -15,8 +20,8 @@ export type Hotspot = {
 };
 
 export type EditorState = {
-  panoramas: File[];
-  activePanoramaId?: string;
+  panoramas: PanoramaFile[];
+  activePanoramaId: string;
   hotspots: Hotspot[];
   draggingHotspotId: string | null;
 };

@@ -18,10 +18,11 @@ const Viewer = ({ editorState, setEditorState }: ViewerProps) => {
   const blockRotate = editorState.draggingHotspotId !== null;
 
   const fileSrc = useMemo(() => {
-    const file = editorState.panoramas[0];
+    const file = editorState.panoramas.find((p) => p.id === editorState.activePanoramaId)?.file;
+    if (!file) return '';
     const src = URL.createObjectURL(file);
     return src;
-  }, [editorState.panoramas]);
+  }, [editorState.panoramas, editorState.activePanoramaId]);
 
   return (
     <Box padding={6} style={{ width: '100%', height: '100%' }}>
