@@ -35,6 +35,24 @@ const Settings = ({ setEditorState, editorState }: SettingsProps) => {
       activePanoramaId: id,
     }));
   };
+  const handleDeletePanorama = (id: string) => {
+    setEditorState((prev) => ({
+      ...prev,
+      panoramas: prev.panoramas.filter((p) => p.id !== id),
+      // If the deleted panorama was active, reset activePanoramaId
+      activePanoramaId:
+        prev.activePanoramaId === id && prev.panoramas.length > 1
+          ? prev.panoramas.find((p) => p.id !== id)?.id || ''
+          : prev.activePanoramaId,
+    }));
+  };
+
+  const handleEditPanorama = (id: string) => {
+    const panoramaToEdit = panoramas.find((p) => p.id === id);
+    if (!panoramaToEdit) return;
+
+    console.log('Editing panorama with id:', panoramaToEdit);
+  };
 
   return (
     <Box
@@ -62,9 +80,10 @@ const Settings = ({ setEditorState, editorState }: SettingsProps) => {
         {panoramas.map((panorama) => (
           <PanoramaTile
             handleActivePanorama={handleActivePanorama}
+            handleDeletePanorama={handleDeletePanorama}
+            handleEditPanorama={handleEditPanorama}
             panorama={panorama}
             activePanoramaId={activePanoramaId}
-            // handleActivePanorama={() => handleActivePanorama(panorama.id)}
             key={panorama.id}
             {...panorama}
           />
@@ -78,20 +97,21 @@ const PanoramaTile = ({
   panorama,
   activePanoramaId,
   handleActivePanorama,
+  handleDeletePanorama,
+  handleEditPanorama,
 }: {
   panorama: PanoramaFile;
   activePanoramaId: string;
-  handleActivePanorama: (e: React.MouseEvent<HTMLButtonElement>, id: string) => void;
+  handleActivePanorama: (id: string) => void;
+  handleDeletePanorama: (id: string) => void;
+  handleEditPanorama: (id: string) => void;
 }) => {
   const { file, id } = panorama;
-
-  console.log(id, 'ID');
-  console.log(activePanoramaId, 'ACTIVE ID');
 
   return (
     <Box>
       <Box>{file.name}</Box>
-      <Button variant="danger" style={{ marginTop: 8 }}>
+      <Button onClick={() => handleDeletePanorama(id)} variant="danger" style={{ marginTop: 8 }}>
         Delete
       </Button>
       {id !== activePanoramaId && (
@@ -107,8 +127,12 @@ const PanoramaTile = ({
         </Box>
       )}
 
-      <Button variant="tertiary" style={{ marginTop: 8, marginLeft: 8 }}>
-        Rename
+      <Button
+        onClick={() => handleEditPanorama(id)}
+        variant="tertiary"
+        style={{ marginTop: 8, marginLeft: 8 }}
+      >
+        edit
       </Button>
     </Box>
   );
