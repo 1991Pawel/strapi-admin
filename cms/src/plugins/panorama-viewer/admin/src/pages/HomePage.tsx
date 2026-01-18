@@ -11,6 +11,7 @@ const HomePage = () => {
     panoramas: [],
     hotspots: [],
     draggingHotspotId: null,
+    activePanoramaId: null,
   });
 
   const handleAddHotspot = () => {

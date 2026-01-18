@@ -21,7 +21,7 @@ export type Hotspot = {
 
 export type EditorState = {
   panoramas: PanoramaFile[];
-  activePanoramaId: string;
+  activePanoramaId: string | null;
   hotspots: Hotspot[];
   draggingHotspotId: string | null;
 };
