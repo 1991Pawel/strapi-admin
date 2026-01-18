@@ -39,11 +39,19 @@ const Settings = ({ setEditorState, editorState }: SettingsProps) => {
     setEditorState((prev) => ({
       ...prev,
       panoramas: prev.panoramas.filter((p) => p.id !== id),
-      // If the deleted panorama was active, reset activePanoramaId
+
       activePanoramaId:
         prev.activePanoramaId === id && prev.panoramas.length > 1
           ? prev.panoramas.find((p) => p.id !== id)?.id || ''
           : prev.activePanoramaId,
+    }));
+    handleDeletedHotspotsForPanorama(id);
+  };
+
+  const handleDeletedHotspotsForPanorama = (id: string) => {
+    setEditorState((prev) => ({
+      ...prev,
+      hotspots: prev.hotspots.filter((hotspot) => hotspot.panoramaId !== id),
     }));
   };
 
