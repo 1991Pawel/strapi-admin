@@ -22,6 +22,9 @@ const PanoramaCanvas = ({ setEditorState, editorState, src }: PanoramaCanvasProp
   const { camera } = useThree();
 
   const initalHotspotPosition = centerOnSphere(camera, R);
+  const selectedPanoramaHotspots = hotspots.filter(
+    (hotspot) => hotspot.panoramaId === editorState.activePanoramaId
+  );
 
   const onPointerMove = (e: any) => {
     if (editorState.draggingHotspotId !== null) {
@@ -54,7 +57,7 @@ const PanoramaCanvas = ({ setEditorState, editorState, src }: PanoramaCanvasProp
         <meshBasicMaterial side={1} map={texture} />
       </mesh>
 
-      {hotspots.map((hotspot) => (
+      {selectedPanoramaHotspots.map((hotspot) => (
         <Hotspot
           setEditorState={setEditorState}
           key={hotspot.id}
