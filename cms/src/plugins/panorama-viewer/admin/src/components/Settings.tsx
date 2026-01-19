@@ -12,14 +12,13 @@ const Settings = ({ setEditorState, editorState }: SettingsProps) => {
 
   const { panoramas, activePanoramaId } = editorState;
 
-  console.log('activePanoramaId:', activePanoramaId);
-
   const handleAddPanoramaFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const newFile = {
       id: Date.now().toString(),
       file,
+      name: file.name,
     };
     setEditorState((prev) => ({
       ...prev,
@@ -57,9 +56,26 @@ const Settings = ({ setEditorState, editorState }: SettingsProps) => {
 
   const handleEditPanorama = (id: string) => {
     const panoramaToEdit = panoramas.find((p) => p.id === id);
+    console.log('Editing panorama:', panoramaToEdit);
     if (!panoramaToEdit) return;
 
-    console.log('Editing panorama with id:', panoramaToEdit);
+    const fileName = prompt('Enter new file name', panoramaToEdit.file.name);
+
+    if (fileName) {
+      const updatedPanoramas = panoramas.map((p) =>
+        p.id === id
+          ? {
+              ...panoramaToEdit,
+              name: fileName,
+            }
+          : p
+      );
+
+      setEditorState((prev) => ({
+        ...prev,
+        panoramas: updatedPanoramas,
+      }));
+    }
   };
 
   return (
@@ -109,16 +125,16 @@ const PanoramaTile = ({
   handleEditPanorama,
 }: {
   panorama: PanoramaFile;
-  activePanoramaId: string;
+  activePanoramaId: string | null;
   handleActivePanorama: (id: string) => void;
   handleDeletePanorama: (id: string) => void;
   handleEditPanorama: (id: string) => void;
 }) => {
-  const { file, id } = panorama;
+  const { file, id, name } = panorama;
 
   return (
     <Box>
-      <Box>{file.name}</Box>
+      <Box>{name}</Box>
       <Button onClick={() => handleDeletePanorama(id)} variant="danger" style={{ marginTop: 8 }}>
         Delete
       </Button>

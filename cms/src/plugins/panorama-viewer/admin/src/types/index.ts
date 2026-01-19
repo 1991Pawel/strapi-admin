@@ -4,6 +4,7 @@ export type StateSetter<T> = Dispatch<SetStateAction<T>>;
 export type PanoramaFile = {
   id: string;
   file: File;
+  name: string;
 };
 
 export type Hotspot = {
