@@ -124,7 +124,7 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
                       <span>Wybierz panorame</span>
                       <span
                         onClick={(e) => {
-                          console.log('Remove target panorama', e.target);
+                          setIsEditing(false);
                         }}
                         style={{ opacity: 0.7, cursor: 'pointer' }}
                       >
