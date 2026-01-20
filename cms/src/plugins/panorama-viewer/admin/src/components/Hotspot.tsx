@@ -85,6 +85,7 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
               style={{
                 marginTop: '10px',
                 minWidth: '140px',
+                maxWidth: '200px',
                 background: 'rgba(20,20,20,0.92)',
                 color: '#ffffff',
                 borderRadius: '10px',
@@ -100,7 +101,6 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
                 <>
                   <div
                     style={{
-                      minWidth: '260px',
                       background: 'rgba(55,55,55,0.96)',
                       borderRadius: '10px',
                       overflow: 'hidden',
@@ -137,7 +137,6 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
                         listStyle: 'none',
                         padding: 0,
                         margin: 0,
-                        background: 'rgba(45,45,45,0.95)',
                       }}
                       onClick={(e) => {
                         const li = e.target.closest('li');
@@ -162,6 +161,10 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
                             padding: '10px 12px',
                             fontSize: '13px',
                             borderTop: '1px solid rgba(255,255,255,0.08)',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+
                             color:
                               panorama.id === hotspot.targetPanoramaId
                                 ? '#4ade80'

@@ -1,5 +1,5 @@
 {
-  "name": "cms",
+  "name": "cms-2",
   "version": "0.1.0",
   "private": true,
   "description": "A Strapi application",
@@ -15,9 +15,9 @@
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.33.2",
-    "@strapi/plugin-users-permissions": "5.33.2",
-    "@strapi/strapi": "5.33.2",
+    "@strapi/plugin-cloud": "5.33.3",
+    "@strapi/plugin-users-permissions": "5.33.3",
+    "@strapi/strapi": "5.33.3",
     "better-sqlite3": "12.4.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -35,7 +35,7 @@
     "npm": ">=6.0.0"
   },
   "strapi": {
-    "uuid": "77bfcf31-1a1f-43b6-ac45-f8791a2c6d4e",
-    "installId": "1e05a4fa1c2e7e12435022f9c38cbaa79e6bcca08e3aa4d29997b2ceb50c4029"
+    "uuid": "c5c81cba-33fe-4fa4-9888-ea704f64585f",
+    "installId": "e44ea5f436f067f0e60dc31372a6cbf7d1cadd1ba4faae3ccd8febf7b258db40"
   }
 }
