@@ -59,6 +59,7 @@ const PanoramaCanvas = ({ setEditorState, editorState, src }: PanoramaCanvasProp
 
       {selectedPanoramaHotspots.map((hotspot) => (
         <Hotspot
+          editorState={editorState}
           setEditorState={setEditorState}
           key={hotspot.id}
           position={{
