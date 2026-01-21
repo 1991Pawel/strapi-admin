@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Html, Billboard } from '@react-three/drei';
 import { type Hotspot as HotspotType, EditorState, StateSetter } from '../types';
+import type { ThreeEvent } from '@react-three/fiber';
 
 type HotspotProps = {
   hotspot: HotspotType;
@@ -16,21 +17,24 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
 
   const targetPanorama = panoramas.find((p) => p.id === hotspot.targetPanoramaId);
 
-  const handlePointerDown = (e: any) => {
+  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
 
-    if (e?.target?.setPointerCapture && e?.pointerId != null) {
-      e.target.setPointerCapture(e.pointerId);
+    const target = e.target as HTMLElement;
+
+    if (target?.setPointerCapture && e?.pointerId != null) {
+      target.setPointerCapture(e.pointerId);
     }
 
     setEditorState((prev) => ({ ...prev, draggingHotspotId: hotspot.id }));
   };
 
-  const handlePointerUp = (e: any) => {
+  const handlePointerUp = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
+    const target = e.target as HTMLElement;
 
-    if (e?.target?.releasePointerCapture && e?.pointerId != null) {
-      e.target.releasePointerCapture(e.pointerId);
+    if (target?.releasePointerCapture && e?.pointerId != null) {
+      target.releasePointerCapture(e.pointerId);
     }
 
     setEditorState((prev) => ({ ...prev, draggingHotspotId: null }));
@@ -139,10 +143,7 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
                         margin: 0,
                       }}
                       onClick={(e) => {
-                        const li = e.target.closest('li');
-                        if (!li) return;
-
-                        const id = li.dataset.id;
+                        const id = (e.target as HTMLElement).getAttribute('data-id');
                         if (!id) return;
 
                         setEditorState((prev) => ({
@@ -175,16 +176,6 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
                           {panorama.name}
                         </li>
                       ))}
-                      {/* <li
-                        style={{
-                          padding: '10px 12px',
-                          fontSize: '13px',
-                          borderTop: '1px solid rgba(255,255,255,0.08)',
-                          color: 'rgba(255,255,255,0.75)',
-                        }}
-                      >
-                        shot-panoramic-composition-bedroom
-                      </li> */}
                     </ul>
                   </div>
                 </>
