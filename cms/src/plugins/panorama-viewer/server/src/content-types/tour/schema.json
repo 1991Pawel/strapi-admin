@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tours",
+  "info": {
+    "singularName": "tour",
+    "pluralName": "tours",
+    "displayName": "Tour",
+    "description": "Virtual tour editor state"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "editorState": {
+      "type": "json",
+      "required": true
+    }
+  }
+}
