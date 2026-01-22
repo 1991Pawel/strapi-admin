@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { Main, Box } from '@strapi/design-system';
+import { Main, Box, Button, Typography, Flex } from '@strapi/design-system';
 import { Settings } from '../components/Settings';
 import { Viewer } from '../components/Viewer';
 import { type EditorState } from '../types';
-import { Button } from '@strapi/design-system';
-
 import { useFetchClient } from '@strapi/strapi/admin';
 
-const initialState = {
+const initialState: EditorState = {
   panoramas: [],
   hotspots: [],
   draggingHotspotId: null,
@@ -16,12 +14,7 @@ const initialState = {
 
 const HomePage = () => {
   const { post } = useFetchClient();
-  const [editorState, setEditorState] = useState<EditorState>({
-    panoramas: [],
-    hotspots: [],
-    draggingHotspotId: null,
-    activePanoramaId: null,
-  });
+  const [editorState, setEditorState] = useState<EditorState>(initialState);
 
   const handleAddHotspot = () => {
     const newHotspot = {
@@ -31,7 +24,7 @@ const HomePage = () => {
       position: null,
     };
 
-    setEditorState((prev: EditorState) => ({
+    setEditorState((prev) => ({
       ...prev,
       hotspots: [...prev.hotspots, newHotspot],
     }));
@@ -72,47 +65,57 @@ const HomePage = () => {
 
   return (
     <Main>
-      <Box padding={6} style={{ width: '100%' }}>
+      <Box padding={8} background="neutral100" minHeight="100vh">
+        <Typography
+          style={{
+            fontWeight: 600,
+            fontSize: '16px',
+            lineHeight: '40px',
+            paddingBottom: '20px',
+            display: 'block',
+            color: 'var(--strapi-color-neutral800)',
+          }}
+          variant="alpha"
+        >
+          Panorama Tour Editor
+        </Typography>
+
         <Box
           style={{
-            width: '100%',
             display: 'grid',
-            gridTemplateColumns: '300px 1fr',
-            gap: 16,
+            gridTemplateColumns: '330px 1fr',
+            gap: '12px',
           }}
         >
-          <Box style={{ background: 'red' }}>
+          <Box background="neutral0" padding={6} shadow="tableShadow" hasRadius>
+            <Typography variant="beta" marginBottom={4}>
+              Panorama List
+            </Typography>
             <Settings editorState={editorState} setEditorState={setEditorState} />
           </Box>
-          <Box style={{ background: 'blue', position: 'relative' }}>
+
+          <Box
+            background="neutral0"
+            padding={4}
+            shadow="tableShadow"
+            hasRadius
+            style={{ position: 'relative', minHeight: '600px' }}
+          >
             <Viewer editorState={editorState} setEditorState={setEditorState} />
           </Box>
-          <Box>
-            <Button
-              onClick={saveTour}
-              style={{
-                marginTop: 16,
-                backgroundColor: '#4CAF50',
-                color: 'white',
-              }}
-            >
-              Zapisz Tours
-            </Button>
-            <Button onClick={handleAddHotspot}>Dodaj Link Hotspot</Button>
-            {showButtonToSaveTour && (
-              <Button
-                onClick={saveTour}
-                style={{
-                  marginTop: 16,
-                  backgroundColor: '#4CAF50',
-                  color: 'white',
-                }}
-              >
-                Zapisz Tours
-              </Button>
-            )}
-          </Box>
         </Box>
+
+        <Flex marginTop={6} gap={4} justifyContent="flex-end">
+          <Button variant="secondary" onClick={handleAddHotspot}>
+            Add Hotspot
+          </Button>
+
+          {showButtonToSaveTour && (
+            <Button variant="success" onClick={saveTour}>
+              Save Tour
+            </Button>
+          )}
+        </Flex>
       </Box>
     </Main>
   );

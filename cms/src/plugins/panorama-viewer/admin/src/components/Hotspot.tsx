@@ -197,7 +197,7 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
                   setIsEditing((prev) => !prev);
                 }}
               >
-                ✏️ Edytuj
+                ✏️ edit
               </div>
 
               <div
@@ -214,7 +214,7 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
                   handleDelete(hotspot.id);
                 }}
               >
-                🗑️ Usuń
+                🗑️ Remove
               </div>
             </div>
           </div>

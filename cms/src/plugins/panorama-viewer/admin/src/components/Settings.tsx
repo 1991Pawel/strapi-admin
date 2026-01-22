@@ -79,11 +79,7 @@ const Settings = ({ setEditorState, editorState }: SettingsProps) => {
   };
 
   return (
-    <Box
-      padding={6}
-      style={{ width: '100%', flexDirection: 'column', display: 'flex', minHeight: '400px' }}
-    >
-      Settings
+    <Box style={{ width: '100%', flexDirection: 'column', display: 'flex', minHeight: '400px' }}>
       <Button
         onClick={() => {
           fileInputRef.current?.click();
@@ -134,30 +130,31 @@ const PanoramaTile = ({
 
   return (
     <Box>
-      <Box>{name}</Box>
-      <Button onClick={() => handleDeletePanorama(id)} variant="danger" style={{ marginTop: 8 }}>
-        Delete
-      </Button>
-      {id !== activePanoramaId && (
-        <Box>
-          {' '}
+      <Box
+        style={{
+          marginBottom: 8,
+        }}
+      >
+        {name}
+      </Box>
+      <Box style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
+        <Button onClick={() => handleDeletePanorama(id)} variant="danger" style={{ width: '100%' }}>
+          🗑️
+        </Button>
+
+        <Button onClick={() => handleEditPanorama(id)} variant="tertiary" style={{ width: '100%' }}>
+          ✏️ Edit
+        </Button>
+        {id !== activePanoramaId && (
           <Button
             onClick={() => handleActivePanorama(id)}
             variant="tertiary"
-            style={{ marginTop: 8, marginLeft: 8 }}
+            style={{ width: '100%' }}
           >
-            Set as Active
-          </Button>{' '}
-        </Box>
-      )}
-
-      <Button
-        onClick={() => handleEditPanorama(id)}
-        variant="tertiary"
-        style={{ marginTop: 8, marginLeft: 8 }}
-      >
-        edit
-      </Button>
+            Active ✅
+          </Button>
+        )}
+      </Box>
     </Box>
   );
 };

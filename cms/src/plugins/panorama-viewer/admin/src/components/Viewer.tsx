@@ -12,7 +12,7 @@ type ViewerProps = {
 
 const Viewer = ({ editorState, setEditorState }: ViewerProps) => {
   if (editorState.panoramas.length === 0) {
-    return <Box>No panorama loaded</Box>;
+    return <Box padding={6}>add Panorama</Box>;
   }
 
   const blockRotate = editorState.draggingHotspotId !== null;
