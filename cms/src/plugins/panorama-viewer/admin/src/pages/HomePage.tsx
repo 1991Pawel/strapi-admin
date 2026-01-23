@@ -88,9 +88,6 @@ const HomePage = () => {
           }}
         >
           <Box background="neutral0" padding={6} shadow="tableShadow" hasRadius>
-            <Typography variant="beta" marginBottom={4}>
-              Panorama List
-            </Typography>
             <Settings editorState={editorState} setEditorState={setEditorState} />
           </Box>
 

@@ -25,6 +25,10 @@ const Settings = ({ setEditorState, editorState }: SettingsProps) => {
       panoramas: [...prev.panoramas, newFile],
       activePanoramaId: newFile.id,
     }));
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleActivePanorama = (id: string) => {
