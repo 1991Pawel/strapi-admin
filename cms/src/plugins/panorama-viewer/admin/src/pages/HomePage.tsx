@@ -62,6 +62,7 @@ const HomePage = () => {
   };
 
   const showButtonToSaveTour = editorState.panoramas.length > 0 && editorState.hotspots.length > 0;
+  const showButtonToAddHotspot = editorState.panoramas.length > 0;
 
   return (
     <Main>
@@ -88,7 +89,21 @@ const HomePage = () => {
           }}
         >
           <Box background="neutral0" padding={6} shadow="tableShadow" hasRadius>
-            <Settings editorState={editorState} setEditorState={setEditorState} />
+            <Box>
+              <Settings editorState={editorState} setEditorState={setEditorState} />
+              <Flex style={{ gap: 8, marginTop: 16 }}>
+                {showButtonToAddHotspot && (
+                  <Button onClick={handleAddHotspot} variant="tertiary">
+                    Add Hotspot
+                  </Button>
+                )}
+                {showButtonToSaveTour && (
+                  <Button onClick={saveTour} variant="success">
+                    Save Tour
+                  </Button>
+                )}
+              </Flex>
+            </Box>
           </Box>
 
           <Box
@@ -101,18 +116,6 @@ const HomePage = () => {
             <Viewer editorState={editorState} setEditorState={setEditorState} />
           </Box>
         </Box>
-
-        <Flex marginTop={6} gap={4} justifyContent="flex-end">
-          <Button variant="secondary" onClick={handleAddHotspot}>
-            Add Hotspot
-          </Button>
-
-          {showButtonToSaveTour && (
-            <Button variant="success" onClick={saveTour}>
-              Save Tour
-            </Button>
-          )}
-        </Flex>
       </Box>
     </Main>
   );

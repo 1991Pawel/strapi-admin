@@ -83,7 +83,7 @@ const Settings = ({ setEditorState, editorState }: SettingsProps) => {
   };
 
   return (
-    <Box style={{ width: '100%', flexDirection: 'column', display: 'flex', minHeight: '400px' }}>
+    <Box style={{ width: '100%', flexDirection: 'column', display: 'flex', height: '100%' }}>
       <Button
         onClick={() => {
           fileInputRef.current?.click();

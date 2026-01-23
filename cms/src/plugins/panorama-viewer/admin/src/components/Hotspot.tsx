@@ -48,8 +48,8 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
   };
 
   return (
-    <group position={[position.x, position.y, position.z]} key={hotspot.id}>
-      <Billboard follow>
+    <Billboard key={hotspot.id} follow>
+      <group position={[position.x, position.y, position.z]}>
         <mesh onPointerDown={handlePointerDown} onPointerUp={handlePointerUp} position={[0, 16, 1]}>
           <sphereGeometry args={[5, 24, 24]} />
           <meshBasicMaterial transparent opacity={0} />
@@ -219,8 +219,8 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
             </div>
           </div>
         </Html>
-      </Billboard>
-    </group>
+      </group>
+    </Billboard>
   );
 };
 
