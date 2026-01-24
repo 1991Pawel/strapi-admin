@@ -25,4 +25,13 @@ export type EditorState = {
   activePanoramaId: string | null;
   hotspots: Hotspot[];
   draggingHotspotId: string | null;
+  actions: EditorStateActions;
+};
+export type EditorStateActions = {
+  setPanoramas: (panoramas: PanoramaFile[]) => void;
+  setHotspots: (hotspots: Hotspot[]) => void;
+  setActivePanoramaId: (id: string | null) => void;
+  setDraggingHotspotId: (id: string | null) => void;
+  removePanorama: (id: string) => void;
+  reset: () => void;
 };
