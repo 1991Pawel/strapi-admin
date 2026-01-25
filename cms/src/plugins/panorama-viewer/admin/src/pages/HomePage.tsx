@@ -4,43 +4,45 @@ import { Settings } from '../components/Settings';
 import { Viewer } from '../components/Viewer';
 import { type EditorState } from '../types';
 import { useFetchClient } from '@strapi/strapi/admin';
-
-const initialState: EditorState = {
-  panoramas: [],
-  hotspots: [],
-  draggingHotspotId: null,
-  activePanoramaId: null,
-};
+import {
+  useSetPanoramas,
+  usePanoramas,
+  useActivePanoramaId,
+  useHotspots,
+  useSetHotspots,
+  useResetStore,
+} from '../store/useStore';
 
 const HomePage = () => {
   const { post } = useFetchClient();
-  const [editorState, setEditorState] = useState<EditorState>(initialState);
+  const panoramas = usePanoramas();
+  const hotspots = useHotspots();
+  const activePanoramaId = useActivePanoramaId();
+  const reset = useResetStore();
+  const setHotspots = useSetHotspots();
 
   const handleAddHotspot = () => {
     const newHotspot = {
       id: Date.now().toString(),
-      panoramaId: editorState.activePanoramaId || 'default-panorama',
+      panoramaId: activePanoramaId || 'default-panorama',
       type: 'link' as const,
       position: null,
     };
 
-    setEditorState((prev) => ({
-      ...prev,
-      hotspots: [...prev.hotspots, newHotspot],
-    }));
+    setHotspots([...hotspots, newHotspot]);
   };
 
   async function saveTour() {
     try {
       const fd = new FormData();
 
-      editorState.panoramas.forEach((p) => {
+      panoramas.forEach((p) => {
         fd.append('files', p.file, p.file.name);
       });
 
       const payload = {
-        ...editorState,
-        panoramas: editorState.panoramas.map((p) => ({
+        ...panoramas,
+        panoramas: panoramas.map((p) => ({
           id: p.id,
           name: p.name,
           fileName: p.file.name,
@@ -58,11 +60,11 @@ const HomePage = () => {
   }
 
   const clearTour = () => {
-    setEditorState(initialState);
+    reset();
   };
 
-  const showButtonToSaveTour = editorState.panoramas.length > 0 && editorState.hotspots.length > 0;
-  const showButtonToAddHotspot = editorState.panoramas.length > 0;
+  const showButtonToSaveTour = panoramas.length > 0 && hotspots.length > 0;
+  const showButtonToAddHotspot = panoramas.length > 0;
 
   return (
     <Main>
@@ -90,7 +92,7 @@ const HomePage = () => {
         >
           <Box background="neutral0" padding={6} shadow="tableShadow" hasRadius>
             <Box>
-              <Settings editorState={editorState} setEditorState={setEditorState} />
+              <Settings />
               <Flex style={{ gap: 8, marginTop: 16 }}>
                 {showButtonToAddHotspot && (
                   <Button onClick={handleAddHotspot} variant="tertiary">
@@ -113,7 +115,7 @@ const HomePage = () => {
             hasRadius
             style={{ position: 'relative', minHeight: '600px' }}
           >
-            <Viewer editorState={editorState} setEditorState={setEditorState} />
+            <Viewer />
           </Box>
         </Box>
       </Box>

@@ -33,5 +33,6 @@ export type EditorStateActions = {
   setActivePanoramaId: (id: string | null) => void;
   setDraggingHotspotId: (id: string | null) => void;
   removePanorama: (id: string) => void;
+  removeHotspot: (id: string) => void;
   reset: () => void;
 };

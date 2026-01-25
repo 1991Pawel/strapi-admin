@@ -2,20 +2,26 @@ import { useState } from 'react';
 import { Html, Billboard } from '@react-three/drei';
 import { type Hotspot as HotspotType, EditorState, StateSetter } from '../types';
 import type { ThreeEvent } from '@react-three/fiber';
+import {
+  usePanoramas,
+  useSetHotspots,
+  useSetDraggingHotspotId,
+  useRemoveHotspot,
+  useHotspots,
+} from '../store/useStore';
 
 type HotspotProps = {
   hotspot: HotspotType;
   position: { x: number; y: number; z: number };
-  setEditorState: StateSetter<EditorState>;
-  editorState: EditorState;
 };
 
-const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProps) => {
+const Hotspot = ({ position, hotspot }: HotspotProps) => {
   const [isEditing, setIsEditing] = useState(false);
-
-  const { panoramas } = editorState;
-
-  const targetPanorama = panoramas.find((p) => p.id === hotspot.targetPanoramaId);
+  const panoramas = usePanoramas();
+  const setHotspots = useSetHotspots();
+  const hotspots = useHotspots();
+  const setDraggingHotspotId = useSetDraggingHotspotId();
+  const removeHotspot = useRemoveHotspot();
 
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
@@ -25,8 +31,7 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
     if (target?.setPointerCapture && e?.pointerId != null) {
       target.setPointerCapture(e.pointerId);
     }
-
-    setEditorState((prev) => ({ ...prev, draggingHotspotId: hotspot.id }));
+    setDraggingHotspotId(hotspot.id);
   };
 
   const handlePointerUp = (e: ThreeEvent<PointerEvent>) => {
@@ -37,14 +42,11 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
       target.releasePointerCapture(e.pointerId);
     }
 
-    setEditorState((prev) => ({ ...prev, draggingHotspotId: null }));
+    setDraggingHotspotId(null);
   };
 
   const handleDelete = (id: string) => {
-    setEditorState((prev: EditorState) => ({
-      ...prev,
-      hotspots: prev.hotspots.filter((h) => h.id !== id),
-    }));
+    removeHotspot(id);
   };
 
   return (
@@ -146,12 +148,11 @@ const Hotspot = ({ position, hotspot, setEditorState, editorState }: HotspotProp
                         const id = (e.target as HTMLElement).getAttribute('data-id');
                         if (!id) return;
 
-                        setEditorState((prev) => ({
-                          ...prev,
-                          hotspots: prev.hotspots.map((h) =>
+                        setHotspots(
+                          hotspots.map((h) =>
                             h.id === hotspot.id ? { ...h, targetPanoramaId: id } : h
-                          ),
-                        }));
+                          )
+                        );
                       }}
                     >
                       {panoramas.map((panorama) => (

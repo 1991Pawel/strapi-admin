@@ -9,6 +9,10 @@ const useStore = create<EditorState>((set, _get, store) => ({
 
   actions: {
     setHotspots: (hotspots) => set(() => ({ hotspots })),
+    removeHotspot: (id) =>
+      set((state) => ({
+        hotspots: state.hotspots.filter((h) => h.id !== id),
+      })),
     setActivePanoramaId: (id) => set(() => ({ activePanoramaId: id })),
     setDraggingHotspotId: (id) => set(() => ({ draggingHotspotId: id })),
     setPanoramas: (panoramas) => set(() => ({ panoramas })),
@@ -33,5 +37,6 @@ export const useActivePanoramaId = () => useStore((state) => state.activePanoram
 export const useSetActivePanoramaId = () => useStore((state) => state.actions.setActivePanoramaId);
 export const useRemovePanorama = () => useStore((state) => state.actions.removePanorama);
 export const useResetStore = () => useStore((state) => state.actions.reset);
+export const useRemoveHotspot = () => useStore((state) => state.actions.removeHotspot);
 
 export default useStore;

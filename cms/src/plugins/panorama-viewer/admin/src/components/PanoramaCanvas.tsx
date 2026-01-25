@@ -1,52 +1,56 @@
-import { useTexture, Html, OrbitControls } from '@react-three/drei';
-import { type EditorState, type StateSetter } from '../types';
-import { useRef } from 'react';
-import { Vector3 } from 'three';
-import { Hotspot } from './Hotspot';
-import { useThree } from '@react-three/fiber';
+import { useTexture } from '@react-three/drei';
 
-const centerOnSphere = (camera: any, R: number) => {
+import { type Camera, Vector3 } from 'three';
+import { Hotspot } from './Hotspot';
+import { useThree, ThreeEvent } from '@react-three/fiber';
+import {
+  useActivePanoramaId,
+  useDraggingHotspotId,
+  useHotspots,
+  useSetHotspots,
+} from '../store/useStore';
+
+const centerOnSphere = (camera: Camera, R: number) => {
   const dir = camera.getWorldDirection(new Vector3()).normalize();
   return dir.multiplyScalar(R - 0.05);
 };
 type PanoramaCanvasProps = {
-  setEditorState: StateSetter<EditorState>;
-  editorState: EditorState;
   src: string;
 };
 const R = 50;
 
-const PanoramaCanvas = ({ setEditorState, editorState, src }: PanoramaCanvasProps) => {
+const PanoramaCanvas = ({ src }: PanoramaCanvasProps) => {
   const texture = useTexture(src);
-  const hotspots = editorState.hotspots;
+  const activePanoramaId = useActivePanoramaId();
+  const hotspots = useHotspots();
+  const setHotspots = useSetHotspots();
+  const draggingHotspotId = useDraggingHotspotId();
+
   const { camera } = useThree();
 
   const initalHotspotPosition = centerOnSphere(camera, R);
   const selectedPanoramaHotspots = hotspots.filter(
-    (hotspot) => hotspot.panoramaId === editorState.activePanoramaId
+    (hotspot) => hotspot.panoramaId === activePanoramaId
   );
 
-  const onPointerMove = (e: any) => {
-    if (editorState.draggingHotspotId !== null) {
+  const onPointerMove = (e: ThreeEvent<PointerEvent>) => {
+    if (draggingHotspotId !== null) {
       e.stopPropagation();
-      console.log('canvas pointer move');
-      console.log('e.point', e.point);
       const dir = e.point.clone().normalize();
       const newPos = dir.multiplyScalar(R - 0.5);
-      // hidden mesh is y=16 above the hotspot position
+
       const offsetY = 16;
 
-      setEditorState((prev) => ({
-        ...prev,
-        hotspots: prev.hotspots.map((hotspot) =>
-          hotspot.id === prev.draggingHotspotId
+      setHotspots(
+        hotspots.map((hotspot) =>
+          hotspot.id === draggingHotspotId
             ? {
                 ...hotspot,
                 position: { x: newPos.x, y: newPos.y - offsetY, z: newPos.z },
               }
             : hotspot
-        ),
-      }));
+        )
+      );
     }
   };
 
@@ -56,11 +60,8 @@ const PanoramaCanvas = ({ setEditorState, editorState, src }: PanoramaCanvasProp
         <sphereGeometry args={[R, 64, 64]} />
         <meshBasicMaterial side={1} map={texture} />
       </mesh>
-
       {selectedPanoramaHotspots.map((hotspot) => (
         <Hotspot
-          editorState={editorState}
-          setEditorState={setEditorState}
           key={hotspot.id}
           position={{
             x: hotspot.position ? hotspot.position.x : initalHotspotPosition.x,
