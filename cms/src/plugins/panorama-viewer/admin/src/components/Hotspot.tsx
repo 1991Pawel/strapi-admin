@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Html, Billboard } from '@react-three/drei';
-import { type Hotspot as HotspotType, EditorState, StateSetter } from '../types';
+import { type Hotspot as HotspotType } from '../types';
 import type { ThreeEvent } from '@react-three/fiber';
+import { type Camera, Vector3 } from 'three';
+import { useThree } from '@react-three/fiber';
 import {
   usePanoramas,
   useSetHotspots,
@@ -12,16 +14,29 @@ import {
 
 type HotspotProps = {
   hotspot: HotspotType;
-  position: { x: number; y: number; z: number };
+  r: number;
 };
 
-const Hotspot = ({ position, hotspot }: HotspotProps) => {
+const Hotspot = ({ hotspot, r }: HotspotProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const panoramas = usePanoramas();
   const setHotspots = useSetHotspots();
   const hotspots = useHotspots();
   const setDraggingHotspotId = useSetDraggingHotspotId();
   const removeHotspot = useRemoveHotspot();
+
+  const centerOnSphere = (camera: Camera, R: number) => {
+    const dir = camera.getWorldDirection(new Vector3()).normalize();
+    return dir.multiplyScalar(R - 0.05);
+  };
+  const { camera } = useThree();
+  const initialHotspotPosition = centerOnSphere(camera, R);
+
+  const position = hotspot.position ?? {
+    x: initialHotspotPosition.x,
+    y: initialHotspotPosition.y,
+    z: initialHotspotPosition.z,
+  };
 
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
@@ -50,8 +65,8 @@ const Hotspot = ({ position, hotspot }: HotspotProps) => {
   };
 
   return (
-    <Billboard key={hotspot.id} follow>
-      <group position={[position.x, position.y, position.z]}>
+    <group position={[position.x, position.y, position.z]}>
+      <Billboard key={hotspot.id} follow>
         <mesh onPointerDown={handlePointerDown} onPointerUp={handlePointerUp} position={[0, 16, 1]}>
           <sphereGeometry args={[5, 24, 24]} />
           <meshBasicMaterial transparent opacity={0} />
@@ -220,8 +235,8 @@ const Hotspot = ({ position, hotspot }: HotspotProps) => {
             </div>
           </div>
         </Html>
-      </group>
-    </Billboard>
+      </Billboard>
+    </group>
   );
 };
 
