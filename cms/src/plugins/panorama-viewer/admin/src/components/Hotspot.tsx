@@ -25,12 +25,12 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
   const setDraggingHotspotId = useSetDraggingHotspotId();
   const removeHotspot = useRemoveHotspot();
 
-  const centerOnSphere = (camera: Camera, R: number) => {
+  const centerOnSphere = (camera: Camera, r: number) => {
     const dir = camera.getWorldDirection(new Vector3()).normalize();
-    return dir.multiplyScalar(R - 0.05);
+    return dir.multiplyScalar(r - 0.05);
   };
   const { camera } = useThree();
-  const initialHotspotPosition = centerOnSphere(camera, R);
+  const initialHotspotPosition = centerOnSphere(camera, r);
 
   const position = hotspot.position ?? {
     x: initialHotspotPosition.x,
