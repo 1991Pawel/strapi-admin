@@ -10,6 +10,7 @@ import {
   useSetDraggingHotspotId,
   useRemoveHotspot,
   useHotspots,
+  useSetActivePanoramaId,
 } from '../store/useStore';
 
 type HotspotProps = {
@@ -24,6 +25,7 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
   const hotspots = useHotspots();
   const setDraggingHotspotId = useSetDraggingHotspotId();
   const removeHotspot = useRemoveHotspot();
+  const setActivePanoramaId = useSetActivePanoramaId();
 
   const centerOnSphere = (camera: Camera, r: number) => {
     const dir = camera.getWorldDirection(new Vector3()).normalize();
@@ -64,6 +66,8 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
     removeHotspot(id);
   };
 
+  const panoramasWithoutCurrent = panoramas.filter((p) => p.id !== hotspot.panoramaId);
+  const hotspotTargetPanorama = panoramas.find((p) => p.id === hotspot.targetPanoramaId);
   return (
     <group position={[position.x, position.y, position.z]}>
       <Billboard key={hotspot.id} follow>
@@ -170,7 +174,7 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
                         );
                       }}
                     >
-                      {panoramas.map((panorama) => (
+                      {panoramasWithoutCurrent.map((panorama) => (
                         <li
                           data-id={panorama.id}
                           key={panorama.id}
@@ -232,6 +236,25 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
               >
                 🗑️ Remove
               </div>
+              {hotspotTargetPanorama && (
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    setActivePanoramaId(hotspotTargetPanorama.id);
+                  }}
+                  style={{
+                    marginTop: '8px',
+                    fontSize: '12px',
+                    color: '#4ade80',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    pointerEvents: 'auto',
+                  }}
+                >
+                  Target Panorama: {hotspotTargetPanorama.name}
+                </div>
+              )}
             </div>
           </div>
         </Html>
