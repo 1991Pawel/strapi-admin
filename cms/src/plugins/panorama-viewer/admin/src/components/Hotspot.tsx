@@ -244,15 +244,17 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
                     setActivePanoramaId(hotspotTargetPanorama.id);
                   }}
                   style={{
-                    marginTop: '8px',
-                    fontSize: '12px',
-                    color: '#4ade80',
-                    textDecoration: 'underline',
+                    padding: '8px 10px',
+                    borderRadius: '8px',
+
+                    background: 'green',
                     cursor: 'pointer',
                     pointerEvents: 'auto',
+
+                    marginTop: '8px',
                   }}
                 >
-                  Target Panorama: {hotspotTargetPanorama.name}
+                  Go to target
                 </div>
               )}
             </div>
