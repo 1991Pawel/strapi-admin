@@ -1,6 +1,7 @@
 import { Box, Button } from '@strapi/design-system';
 import { useRef } from 'react';
-import { type EditorState, PanoramaFile, StateSetter } from '../types';
+import { type PanoramaFile } from '../types';
+import { v4 as uuidv4 } from 'uuid';
 import {
   usePanoramas,
   useActivePanoramaId,
@@ -15,64 +16,38 @@ const Settings = () => {
   const setActivePanoramaId = useSetActivePanoramaId();
   const setPanoramas = useSetPanoramas();
 
+  const handleActivePanorama = (id: string) => {
+    setActivePanoramaId(id);
+  };
+
   const handleAddPanoramaFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const newFile = {
-      id: Date.now().toString(),
+      id: uuidv4(),
       file,
       name: file.name,
     };
 
-    setActivePanoramaId(newFile.id);
+    handleActivePanorama(newFile.id);
     setPanoramas([...panoramas, newFile]);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
-  const handleActivePanorama = (id: string) => {
-    setActivePanoramaId(id);
-  };
   const handleDeletePanorama = (id: string) => {
-    // setEditorState((prev) => ({
-    //   ...prev,
-    //   panoramas: prev.panoramas.filter((p) => p.id !== id),
-    //   activePanoramaId:
-    //     prev.activePanoramaId === id && prev.panoramas.length > 1
-    //       ? prev.panoramas.find((p) => p.id !== id)?.id || ''
-    //       : prev.activePanoramaId,
-    // }));
-    // handleDeletedHotspotsForPanorama(id);
     setPanoramas(panoramas.filter((p) => p.id !== id));
   };
 
-  const handleDeletedHotspotsForPanorama = (id: string) => {
-    // setEditorState((prev) => ({
-    //   ...prev,
-    //   hotspots: prev.hotspots.filter((hotspot) => hotspot.panoramaId !== id),
-    // }));
-  };
-
   const handleEditPanorama = (id: string) => {
-    // const panoramaToEdit = panoramas.find((p) => p.id === id);
-    // console.log('Editing panorama:', panoramaToEdit);
-    // if (!panoramaToEdit) return;
-    // const fileName = prompt('Enter new file name', panoramaToEdit.file.name);
-    // if (fileName) {
-    //   const updatedPanoramas = panoramas.map((p) =>
-    //     p.id === id
-    //       ? {
-    //           ...panoramaToEdit,
-    //           name: fileName,
-    //         }
-    //       : p
-    //   );
-    //   setEditorState((prev) => ({
-    //     ...prev,
-    //     panoramas: updatedPanoramas,
-    //   }));
-    // }
+    const panorama = panoramas.find((p) => p.id === id);
+    if (!panorama) return;
+
+    const newName = prompt('Enter new name for panorama', panorama.name);
+    if (newName) {
+      setPanoramas(panoramas.map((p) => (p.id === id ? { ...p, name: newName } : p)));
+    }
   };
 
   return (
@@ -102,7 +77,6 @@ const Settings = () => {
             panorama={panorama}
             activePanoramaId={activePanoramaId}
             key={panorama.id}
-            {...panorama}
           />
         ))}
       </Box>
