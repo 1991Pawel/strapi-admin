@@ -68,6 +68,7 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
 
   const panoramasWithoutCurrent = panoramas.filter((p) => p.id !== hotspot.panoramaId);
   const hotspotTargetPanorama = panoramas.find((p) => p.id === hotspot.targetPanoramaId);
+  const showEditButton = panoramas.length > 1;
   return (
     <group position={[position.x, position.y, position.z]}>
       <Billboard key={hotspot.id} follow>
@@ -201,24 +202,26 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
                 </>
               )}
 
-              <div
-                style={{
-                  padding: '8px 10px',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255,255,255,0.12)',
-                  background: 'rgba(255,255,255,0.06)',
-                  cursor: 'pointer',
-                  marginBottom: '6px',
-                  marginTop: '8px',
-                  pointerEvents: 'auto',
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsEditing((prev) => !prev);
-                }}
-              >
-                ✏️ edit
-              </div>
+              {showEditButton && (
+                <div
+                  style={{
+                    padding: '8px 10px',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    background: 'rgba(255,255,255,0.06)',
+                    cursor: 'pointer',
+                    marginBottom: '6px',
+                    marginTop: '8px',
+                    pointerEvents: 'auto',
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsEditing((prev) => !prev);
+                  }}
+                >
+                  ✏️ select target
+                </div>
+              )}
 
               <div
                 style={{
