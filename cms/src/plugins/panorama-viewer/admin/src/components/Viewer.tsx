@@ -12,9 +12,8 @@ const Viewer = () => {
 
   const fileSrc = useMemo(() => {
     const file = panoramas.find((p) => p.id === activePanoramaId)?.file;
-    if (!file) return '';
-    const src = URL.createObjectURL(file);
-    return src;
+    if (!file) return null;
+    return URL.createObjectURL(file);
   }, [panoramas, activePanoramaId]);
 
   if (panoramas.length === 0) {
@@ -25,7 +24,7 @@ const Viewer = () => {
   return (
     <Box padding={6} style={{ width: '100%', height: '100%' }}>
       <Canvas camera={{ fov: 75, position: [0, 0, 0] }}>
-        <PanoramaCanvas src={fileSrc} />
+        {fileSrc && <PanoramaCanvas key={fileSrc} src={fileSrc} />}
         <OrbitControls
           enableZoom={false}
           enablePan={false}

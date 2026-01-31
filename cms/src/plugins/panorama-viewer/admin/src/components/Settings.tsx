@@ -37,6 +37,7 @@ const Settings = () => {
   };
 
   const handleDeletePanorama = (id: string) => {
+    console.log('Deleting panorama with id:', id);
     setPanoramas(panoramas.filter((p) => p.id !== id));
   };
 
@@ -106,11 +107,13 @@ const PanoramaTile = ({
           marginBottom: 8,
         }}
       >
-        <img
-          src={URL.createObjectURL(file)}
-          alt={name}
-          style={{ width: '100%', objectFit: 'cover', height: 150 }}
-        />
+        {file && (
+          <img
+            src={URL.createObjectURL(file)}
+            alt={name}
+            style={{ width: '100%', objectFit: 'cover', height: 150 }}
+          />
+        )}
       </Box>
       <Box style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
         <Button onClick={() => handleDeletePanorama(id)} variant="danger" style={{ width: '100%' }}>
