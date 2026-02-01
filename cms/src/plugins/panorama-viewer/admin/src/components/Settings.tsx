@@ -37,7 +37,6 @@ const Settings = () => {
   };
 
   const handleDeletePanorama = (id: string) => {
-    console.log('Deleting panorama with id:', id);
     setPanoramas(panoramas.filter((p) => p.id !== id));
   };
 
@@ -107,6 +106,7 @@ const PanoramaTile = ({
           marginBottom: 8,
         }}
       >
+        <p style={{ marginBottom: 12 }}>{name}</p>
         {file && (
           <img
             src={URL.createObjectURL(file)}
