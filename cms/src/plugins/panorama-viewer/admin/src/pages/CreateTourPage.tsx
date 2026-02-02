@@ -90,7 +90,7 @@ const CreateTourPage = () => {
             gap: '12px',
           }}
         >
-          <Box background="neutral0" padding={6} shadow="tableShadow" hasRadius>
+          <Box background="neutral0" padding={6} shadow="tableShadow">
             <Box>
               <Settings />
               <Flex style={{ gap: 8, marginTop: 16 }}>
@@ -112,7 +112,6 @@ const CreateTourPage = () => {
             background="neutral0"
             padding={4}
             shadow="tableShadow"
-            hasRadius
             style={{ position: 'relative', minHeight: '600px' }}
           >
             <Viewer />
