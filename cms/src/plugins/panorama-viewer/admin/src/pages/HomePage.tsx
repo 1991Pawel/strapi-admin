@@ -19,43 +19,51 @@ const MOCK_TOURS = [
 const HomePage = () => {
   return (
     <Main>
-      <Box padding={8} background="neutral100" minHeight="100vh">
+      <Box padding={8} marginTop={6}>
+        {' '}
         <Button
           as={Link}
           to="/plugins/panorama-viewer/create-tour"
           variant="secondary"
-          style={{ marginTop: 16, paddingBottom: 24 }}
+          style={{ margin: 42, padding: 16 }}
         >
           Create New Panorama Tour
         </Button>
-        <Box display="grid" gridTemplateColumns="repeat(auto-fill, 320px)" gap={6}>
-          {MOCK_TOURS.map((tour) => (
-            <Box
-              key={tour.id}
-              width="320px"
-              height="320px"
-              background="neutral0"
-              shadow="tableShadow"
-              overflow="hidden"
-              borderRadius="10px"
-            >
-              {/* IMAGE */}
+        <Box padding={8} background="neutral100" minHeight="100vh">
+          <Box
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gap: '32px',
+            }}
+          >
+            {MOCK_TOURS.map((tour) => (
               <Box
-                height="220px"
-                style={{
-                  backgroundImage: `url(${tour.thumbnail})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
-              />
+                key={tour.id}
+                width="320px"
+                height="320px"
+                background="neutral0"
+                shadow="tableShadow"
+                overflow="hidden"
+                borderRadius="10px"
+              >
+                <Box
+                  height="220px"
+                  style={{
+                    backgroundImage: `url(${tour.thumbnail})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                />
 
-              <Box padding={4}>
-                <Typography variant="omega" fontWeight="bold">
-                  {tour.title}
-                </Typography>
+                <Box padding={4}>
+                  <Typography variant="omega" fontWeight="bold">
+                    {tour.title}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
-          ))}
+            ))}
+          </Box>
         </Box>
       </Box>
     </Main>
