@@ -6,6 +6,10 @@ const useStore = create<EditorState>((set, _get, store) => ({
   hotspots: [],
   draggingHotspotId: null,
   activePanoramaId: null,
+  tourDetails: {
+    title: '',
+    thumbnail: null,
+  },
 
   actions: {
     setHotspots: (hotspots) => set(() => ({ hotspots })),

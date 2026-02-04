@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { Main, Box, Button, Typography, Flex } from '@strapi/design-system';
 import { Settings } from '../components/Settings';
 import { Viewer } from '../components/Viewer';
-import { type EditorState } from '../types';
 import { useFetchClient } from '@strapi/strapi/admin';
+import { TourDetailsModal } from '../components/TourDetailsModal';
 import {
-  useSetPanoramas,
   usePanoramas,
   useActivePanoramaId,
   useHotspots,
@@ -20,6 +19,11 @@ const CreateTourPage = () => {
   const activePanoramaId = useActivePanoramaId();
   const reset = useResetStore();
   const setHotspots = useSetHotspots();
+  const [isTourDetailsModalOpen, setIsTourDetailsModalOpen] = useState(true);
+
+  const handleCloseTourDetailsModal = () => {
+    setIsTourDetailsModalOpen(false);
+  };
 
   const handleAddHotspot = () => {
     const newHotspot = {
@@ -68,6 +72,7 @@ const CreateTourPage = () => {
 
   return (
     <Main>
+      <TourDetailsModal onClose={handleCloseTourDetailsModal} open={true} />
       <Box padding={8} background="neutral100" minHeight="100vh">
         <Typography
           style={{
