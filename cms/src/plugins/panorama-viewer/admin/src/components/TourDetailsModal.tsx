@@ -32,7 +32,7 @@ const TourDetailsModal = ({ open, onClose, onSave }: Props) => {
   return (
     <Modal.Root
       open={open}
-      onOpenChange={(isOpen) => {
+      onOpenChange={(isOpen: boolean) => {
         if (!isOpen) onClose();
       }}
     >
