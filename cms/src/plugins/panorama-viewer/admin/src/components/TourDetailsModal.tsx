@@ -36,7 +36,7 @@ const TourDetailsModal = ({ open, onClose, onSave }: Props) => {
         if (!isOpen) onClose();
       }}
     >
-      <Modal.Content labelledBy="tour-details-modal">
+      <Modal.Content labelledBy="tour-details-modal" style={{ zIndex: 9999 }}>
         <Modal.Header>
           <Modal.Title id="tour-details-modal">Tour details</Modal.Title>
         </Modal.Header>

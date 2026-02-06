@@ -19,10 +19,14 @@ const CreateTourPage = () => {
   const activePanoramaId = useActivePanoramaId();
   const reset = useResetStore();
   const setHotspots = useSetHotspots();
-  const [isTourDetailsModalOpen, setIsTourDetailsModalOpen] = useState(true);
+  const [isTourDetailsModalOpen, setIsTourDetailsModalOpen] = useState(false);
 
   const handleCloseTourDetailsModal = () => {
     setIsTourDetailsModalOpen(false);
+  };
+
+  const handleOpenTourDetailsModal = () => {
+    setIsTourDetailsModalOpen(true);
   };
 
   const handleAddHotspot = () => {
@@ -72,7 +76,6 @@ const CreateTourPage = () => {
 
   return (
     <Main>
-      <TourDetailsModal onClose={handleCloseTourDetailsModal} open={true} />
       <Box padding={8} background="neutral100" minHeight="100vh">
         <Typography
           style={{
@@ -105,7 +108,7 @@ const CreateTourPage = () => {
                   </Button>
                 )}
                 {showButtonToSaveTour && (
-                  <Button onClick={saveTour} variant="success">
+                  <Button onClick={handleOpenTourDetailsModal} variant="success">
                     Save Tour
                   </Button>
                 )}
@@ -123,6 +126,7 @@ const CreateTourPage = () => {
           </Box>
         </Box>
       </Box>
+      <TourDetailsModal onClose={handleCloseTourDetailsModal} open={isTourDetailsModalOpen} />
     </Main>
   );
 };

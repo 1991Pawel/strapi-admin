@@ -77,7 +77,7 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
           <meshBasicMaterial transparent opacity={0} />
         </mesh>
 
-        <Html pointerEvents="none" transform distanceFactor={100}>
+        <Html pointerEvents="none" transform zIndexRange={[10, 0]} distanceFactor={100}>
           <div
             style={{
               display: 'flex',
