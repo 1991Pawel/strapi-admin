@@ -60,15 +60,18 @@ const CreateTourPage = () => {
       fd.append('data', JSON.stringify(payload));
 
       const res = await post('/panorama-viewer/save-tour', fd);
-      clearTour();
+
       console.log('Saved', res.data);
     } catch (e) {
       console.error(e);
+    } finally {
+      clearTour();
     }
   }
 
   const clearTour = () => {
     reset();
+    setIsTourDetailsModalOpen(false);
   };
 
   const showButtonToSaveTour = panoramas.length > 0 && hotspots.length > 0;
@@ -126,7 +129,11 @@ const CreateTourPage = () => {
           </Box>
         </Box>
       </Box>
-      <TourDetailsModal onClose={handleCloseTourDetailsModal} open={isTourDetailsModalOpen} />
+      <TourDetailsModal
+        onSave={saveTour}
+        onClose={handleCloseTourDetailsModal}
+        open={isTourDetailsModalOpen}
+      />
     </Main>
   );
 };

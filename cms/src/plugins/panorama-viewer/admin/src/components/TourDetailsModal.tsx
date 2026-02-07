@@ -29,6 +29,8 @@ const TourDetailsModal = ({ open, onClose, onSave }: Props) => {
     setThumbnail(null);
   };
 
+  const buttonDisabled = !title.trim() || !thumbnail;
+
   return (
     <Modal.Root
       open={open}
@@ -75,7 +77,7 @@ const TourDetailsModal = ({ open, onClose, onSave }: Props) => {
           <Modal.Close>
             <Button variant="tertiary">Cancel</Button>
           </Modal.Close>
-          <Button onClick={handleSave} disabled={!title.trim()}>
+          <Button onClick={handleSave} disabled={buttonDisabled}>
             Save
           </Button>
         </Modal.Footer>

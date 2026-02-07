@@ -17,7 +17,7 @@ const Viewer = () => {
   }, [panoramas, activePanoramaId]);
 
   if (panoramas.length === 0) {
-    return <Box padding={6}>add Panorama</Box>;
+    return <Box padding={6}>upload files</Box>;
   }
   const blockRotate = draggingHotspotId !== null;
 

@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Html, Billboard } from '@react-three/drei';
 import { type Hotspot as HotspotType } from '../types';
 import type { ThreeEvent } from '@react-three/fiber';
-import { type Camera, Vector3 } from 'three';
-import { useThree } from '@react-three/fiber';
+import { type Camera, Vector3, Group } from 'three';
+import { useThree, useFrame } from '@react-three/fiber';
 import {
   usePanoramas,
   useSetHotspots,
@@ -11,7 +11,9 @@ import {
   useRemoveHotspot,
   useHotspots,
   useSetActivePanoramaId,
+  useDraggingHotspotId,
 } from '../store/useStore';
+import { dragPositionRef } from '../store/dragRef';
 
 type HotspotProps = {
   hotspot: HotspotType;
@@ -24,8 +26,10 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
   const setHotspots = useSetHotspots();
   const hotspots = useHotspots();
   const setDraggingHotspotId = useSetDraggingHotspotId();
+  const draggingHotspotId = useDraggingHotspotId();
   const removeHotspot = useRemoveHotspot();
   const setActivePanoramaId = useSetActivePanoramaId();
+  const groupRef = useRef<Group>(null);
 
   const centerOnSphere = (camera: Camera, r: number) => {
     const dir = camera.getWorldDirection(new Vector3()).normalize();
@@ -40,6 +44,14 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
     z: initialHotspotPosition.z,
   };
 
+  const isDragging = draggingHotspotId === hotspot.id;
+
+  useFrame(() => {
+    if (isDragging && groupRef.current) {
+      groupRef.current.position.set(dragPositionRef.x, dragPositionRef.y, dragPositionRef.z);
+    }
+  });
+
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
 
@@ -48,6 +60,9 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
     if (target?.setPointerCapture && e?.pointerId != null) {
       target.setPointerCapture(e.pointerId);
     }
+    dragPositionRef.x = position.x;
+    dragPositionRef.y = position.y;
+    dragPositionRef.z = position.z;
     setDraggingHotspotId(hotspot.id);
   };
 
@@ -59,6 +74,13 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
       target.releasePointerCapture(e.pointerId);
     }
 
+    setHotspots(
+      hotspots.map((h) =>
+        h.id === hotspot.id
+          ? { ...h, position: { x: dragPositionRef.x, y: dragPositionRef.y, z: dragPositionRef.z } }
+          : h
+      )
+    );
     setDraggingHotspotId(null);
   };
 
@@ -70,11 +92,11 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
   const hotspotTargetPanorama = panoramas.find((p) => p.id === hotspot.targetPanoramaId);
   const showEditButton = panoramas.length > 1;
   return (
-    <group position={[position.x, position.y, position.z]}>
-      <Billboard key={hotspot.id} follow>
+    <group ref={groupRef} position={[position.x, position.y, position.z]}>
+      <Billboard follow>
         <mesh onPointerDown={handlePointerDown} onPointerUp={handlePointerUp} position={[0, 16, 1]}>
-          <sphereGeometry args={[5, 24, 24]} />
-          <meshBasicMaterial transparent opacity={0} />
+          <sphereGeometry args={[12, 24, 24]} />
+          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
         </mesh>
 
         <Html pointerEvents="none" transform zIndexRange={[10, 0]} distanceFactor={100}>

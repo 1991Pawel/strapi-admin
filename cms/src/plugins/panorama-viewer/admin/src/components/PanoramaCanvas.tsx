@@ -1,13 +1,12 @@
 import { useTexture } from '@react-three/drei';
-import { type Camera, Vector3 } from 'three';
 import { Hotspot } from './Hotspot';
-import { useThree, ThreeEvent } from '@react-three/fiber';
+import { ThreeEvent } from '@react-three/fiber';
 import {
   useActivePanoramaId,
   useDraggingHotspotId,
   useHotspots,
-  useSetHotspots,
 } from '../store/useStore';
+import { dragPositionRef } from '../store/dragRef';
 
 type PanoramaCanvasProps = {
   src: string;
@@ -18,7 +17,6 @@ const PanoramaCanvas = ({ src }: PanoramaCanvasProps) => {
   const texture = useTexture(src);
   const activePanoramaId = useActivePanoramaId();
   const hotspots = useHotspots();
-  const setHotspots = useSetHotspots();
   const draggingHotspotId = useDraggingHotspotId();
 
   const selectedPanoramaHotspots = hotspots.filter(
@@ -31,16 +29,9 @@ const PanoramaCanvas = ({ src }: PanoramaCanvasProps) => {
       const dir = e.point.clone().normalize();
       const newPos = dir.multiplyScalar(R - 0.5);
       const offsetY = 16;
-      setHotspots(
-        hotspots.map((hotspot) =>
-          hotspot.id === draggingHotspotId
-            ? {
-                ...hotspot,
-                position: { x: newPos.x, y: newPos.y - offsetY, z: newPos.z },
-              }
-            : hotspot
-        )
-      );
+      dragPositionRef.x = newPos.x;
+      dragPositionRef.y = newPos.y - offsetY;
+      dragPositionRef.z = newPos.z;
     }
   };
 
