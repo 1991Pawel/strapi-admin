@@ -99,7 +99,7 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
           <meshBasicMaterial transparent opacity={0} depthWrite={false} />
         </mesh>
 
-        <Html pointerEvents="none" transform zIndexRange={[10, 0]} distanceFactor={100}>
+        <Html pointerEvents="none" transform zIndexRange={[10, 0]} distanceFactor={90}>
           <div
             style={{
               display: 'flex',
@@ -144,7 +144,7 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div style={{ fontWeight: 700, marginBottom: '8px', fontSize: '12px' }}>Hotspot</div>
+              <div style={{ fontWeight: 700, marginBottom: '8px', fontSize: '8px' }}>Hotspot</div>
               {isEditing && (
                 <>
                   <div
@@ -247,12 +247,13 @@ const Hotspot = ({ hotspot, r }: HotspotProps) => {
 
               <div
                 style={{
-                  padding: '8px 10px',
+                  padding: '4px 6px',
                   borderRadius: '8px',
                   border: '1px solid rgba(231,76,60,0.35)',
                   background: 'rgba(231,76,60,0.18)',
                   cursor: 'pointer',
                   pointerEvents: 'auto',
+                  fontSize: '8px',
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
