@@ -28,4 +28,15 @@ export default ({ strapi }) => ({
     });
     ctx.body = { ok: true, id: created.id, panoramas: editorState.panoramas };
   },
+
+  async getTours(ctx) {
+    try {
+      const tours = await strapi.entityService.findMany('plugin::panorama-viewer.tour', {
+        fields: ['id', 'documentId', 'editorState'],
+      });
+      ctx.body = { data: tours };
+    } catch (error) {
+      ctx.throw(500, 'Failed to fetch tours');
+    }
+  },
 });

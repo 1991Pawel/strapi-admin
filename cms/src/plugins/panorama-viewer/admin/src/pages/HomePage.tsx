@@ -1,22 +1,49 @@
 import { Main, Box, Button, Typography } from '@strapi/design-system';
 import { Link } from 'react-router-dom';
+import { useFetchClient } from '@strapi/strapi/admin';
+import { useState, useEffect } from 'react';
 
-const MOCK_TOURS = [
-  {
-    id: '1',
-    title: 'Mieszkanie – salon',
-    thumbnail:
-      'http://localhost:1337/uploads/aerial_drone_panorama_view_village_located_near_river_hills_fields_godrays_clouds_moldova_ceeffea75d.jpg',
-  },
-  {
-    id: '2',
-    title: 'Biuro – open space',
-    thumbnail:
-      'http://localhost:1337/uploads/aerial_drone_panorama_view_village_located_near_river_hills_fields_godrays_clouds_moldova_ceeffea75d.jpg',
-  },
-];
+interface Tour {
+  id: string;
+  documentId?: string;
+  title: string;
+  thumbnail: string;
+}
 
 const HomePage = () => {
+  const { get } = useFetchClient();
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      try {
+        setIsLoading(true);
+        const response = await get('/panorama-viewer/tours');
+
+        if (response.data?.data) {
+          const toursData = response.data.data.map((tour: any) => {
+            const editorState = tour.editorState || {};
+            const firstPanorama = editorState.panoramas?.[0];
+
+            return {
+              id: tour.documentId || tour.id,
+              title: editorState.title || 'Untitled Tour',
+              thumbnail: firstPanorama?.url || '',
+            };
+          });
+          setTours(toursData);
+        }
+      } catch (error) {
+        console.error('Error fetching tours:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTours();
+  }, [get]);
+
   return (
     <Main>
       <Box padding={8} marginTop={6}>
@@ -37,7 +64,10 @@ const HomePage = () => {
               gap: '32px',
             }}
           >
-            {MOCK_TOURS.map((tour) => (
+            {isLoading ? (
+              <Typography>Loading tours...</Typography>
+            ) : (
+              tours.map((tour: Tour) => (
               <Box
                 key={tour.id}
                 width="320px"
@@ -62,7 +92,8 @@ const HomePage = () => {
                   </Typography>
                 </Box>
               </Box>
-            ))}
+            ))
+            )}
           </Box>
         </Box>
       </Box>

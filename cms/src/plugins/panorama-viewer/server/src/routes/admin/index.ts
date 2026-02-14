@@ -9,5 +9,13 @@ export default () => ({
         policies: ['admin::isAuthenticatedAdmin'],
       },
     },
+    {
+      method: 'GET',
+      path: '/tours',
+      handler: 'editor.getTours',
+      config: {
+        policies: ['admin::isAuthenticatedAdmin'],
+      },
+    },
   ],
 });
