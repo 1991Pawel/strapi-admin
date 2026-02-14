@@ -2,9 +2,11 @@ export default ({ strapi }) => ({
   async save(ctx) {
     const { data } = ctx.request.body;
     const files = ctx.request.files?.files;
+    const thumbnailFile = ctx.request.files?.thumbnail;
     const payload = typeof data === 'string' ? JSON.parse(data) : data;
     const editorState = payload;
 
+    // Upload panorama files
     let uploadedFiles = [];
     if (files) {
       const filesArray = Array.isArray(files) ? files : [files];
@@ -16,6 +18,18 @@ export default ({ strapi }) => ({
         uploadedFiles.push(uploaded[0]);
       }
     }
+
+    // Upload thumbnail file
+    let thumbnailUrl = null;
+    if (thumbnailFile) {
+      const uploaded = await strapi.plugin('upload').service('upload').upload({
+        data: {},
+        files: thumbnailFile,
+      });
+      thumbnailUrl = uploaded[0]?.url;
+    }
+
+    // Map panorama URLs
     if (uploadedFiles.length) {
       editorState.panoramas = editorState.panoramas.map((p, i) => ({
         ...p,
@@ -23,6 +37,12 @@ export default ({ strapi }) => ({
         file: undefined,
       }));
     }
+
+    // Add thumbnail to editorState
+    if (thumbnailUrl) {
+      editorState.thumbnail = thumbnailUrl;
+    }
+
     const created = await strapi.entityService.create('plugin::panorama-viewer.tour', {
       data: { editorState },
     });

@@ -10,6 +10,7 @@ import {
   useHotspots,
   useSetHotspots,
   useResetStore,
+  useSetTourDetails,
 } from '../store/useStore';
 
 const CreateTourPage = () => {
@@ -19,6 +20,7 @@ const CreateTourPage = () => {
   const activePanoramaId = useActivePanoramaId();
   const reset = useResetStore();
   const setHotspots = useSetHotspots();
+  const setTourDetails = useSetTourDetails();
   const [isTourDetailsModalOpen, setIsTourDetailsModalOpen] = useState(false);
 
   const handleCloseTourDetailsModal = () => {
@@ -40,16 +42,23 @@ const CreateTourPage = () => {
     setHotspots([...hotspots, newHotspot]);
   };
 
-  async function saveTour() {
+  async function saveTour(tourDetails: { title: string; thumbnail: File | null }) {
     try {
       const fd = new FormData();
 
+      // Add panorama files
       panoramas.forEach((p) => {
         fd.append('files', p.file, p.file.name);
       });
 
+      // Add thumbnail file if exists
+      if (tourDetails.thumbnail) {
+        fd.append('thumbnail', tourDetails.thumbnail, tourDetails.thumbnail.name);
+      }
+
       const payload = {
-        ...panoramas,
+        title: tourDetails.title,
+        hotspots: hotspots,
         panoramas: panoramas.map((p) => ({
           id: p.id,
           name: p.name,

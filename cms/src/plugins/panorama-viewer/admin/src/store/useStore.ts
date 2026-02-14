@@ -26,6 +26,7 @@ const useStore = create<EditorState>((set, _get, store) => ({
         hotspots: state.hotspots.filter((h) => h.panoramaId !== id),
         activePanoramaId: state.activePanoramaId === id ? null : state.activePanoramaId,
       })),
+    setTourDetails: (tourDetails) => set(() => ({ tourDetails })),
     reset: () => set(store.getInitialState()),
   },
 }));
@@ -42,5 +43,7 @@ export const useSetActivePanoramaId = () => useStore((state) => state.actions.se
 export const useRemovePanorama = () => useStore((state) => state.actions.removePanorama);
 export const useResetStore = () => useStore((state) => state.actions.reset);
 export const useRemoveHotspot = () => useStore((state) => state.actions.removeHotspot);
+export const useTourDetails = () => useStore((state) => state.tourDetails);
+export const useSetTourDetails = () => useStore((state) => state.actions.setTourDetails);
 
 export default useStore;

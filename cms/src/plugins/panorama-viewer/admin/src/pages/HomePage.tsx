@@ -24,12 +24,11 @@ const HomePage = () => {
         if (response.data?.data) {
           const toursData = response.data.data.map((tour: any) => {
             const editorState = tour.editorState || {};
-            const firstPanorama = editorState.panoramas?.[0];
 
             return {
               id: tour.documentId || tour.id,
               title: editorState.title || 'Untitled Tour',
-              thumbnail: firstPanorama?.url || '',
+              thumbnail: editorState.thumbnail || '',
             };
           });
           setTours(toursData);

@@ -20,11 +20,17 @@ export type Hotspot = {
   infoText?: string;
 };
 
+export type TourDetails = {
+  title: string;
+  thumbnail: File | null;
+};
+
 export type EditorState = {
   panoramas: PanoramaFile[];
   activePanoramaId: string | null;
   hotspots: Hotspot[];
   draggingHotspotId: string | null;
+  tourDetails: TourDetails;
   actions: EditorStateActions;
 };
 export type EditorStateActions = {
@@ -34,5 +40,6 @@ export type EditorStateActions = {
   setDraggingHotspotId: (id: string | null) => void;
   removePanorama: (id: string) => void;
   removeHotspot: (id: string) => void;
+  setTourDetails: (tourDetails: TourDetails) => void;
   reset: () => void;
 };
